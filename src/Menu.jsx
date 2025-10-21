@@ -1,24 +1,29 @@
 import './Menu.css'
 import { useNavigate } from 'react-router-dom'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import pizzaImg from './assets/pizza.jpg'
 import cookieFont from './assets/Cookie-Regular.ttf';
 
 function Menu() {
   const navigate = useNavigate()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [showBackToTop, setShowBackToTop] = useState(false);
+  const backToTopRef = useRef(null);
 
   // Intersection Observer for fade-in animations
   useEffect(() => {
     const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px'
+      threshold: 0.2,
+      rootMargin: '0px 0px -80px 0px'
     }
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          entry.target.classList.add('visible')
+          // Small delay to ensure smooth animation timing
+          setTimeout(() => {
+            entry.target.classList.add('visible')
+          }, 50)
         }
       })
     }, observerOptions)
@@ -35,6 +40,31 @@ function Menu() {
       })
     }
   }, [])
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowBackToTop(window.pageYOffset > 300);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    if (backToTopRef.current) {
+      backToTopRef.current.classList.remove('clicked');
+      backToTopRef.current.offsetHeight;
+      backToTopRef.current.classList.add('clicked');
+      setTimeout(() => {
+        if (backToTopRef.current) {
+          backToTopRef.current.classList.remove('clicked');
+        }
+      }, 800);
+    }
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  };
 
   const handleJumpTo = (id) => {
     const el = document.getElementById(id)
@@ -92,12 +122,12 @@ function Menu() {
     'Truffle Arancini': 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=400&q=80',
     'Cheese Garlic Bread': 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=400&q=80',
     
-    // Soups & Salads
-    'Tom Yam River Prawns': 'https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?auto=format&fit=crop&w=400&q=80',
-    'Minestrone Soup': 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=400&q=80',
-    'Tuna Nicoise Salad': 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=400&q=80',
-    'Caesar Salad': 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=400&q=80',
-    'Quinoa Salad': 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=400&q=80',
+    // // Soups & Salads
+    // 'Tom Yam River Prawns': 'https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?auto=format&fit=crop&w=400&q=80',
+    // 'Minestrone Soup': 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=400&q=80',
+    // 'Tuna Nicoise Salad': 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=400&q=80',
+    // 'Caesar Salad': 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=400&q=80',
+    // 'Quinoa Salad': 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=400&q=80',
     
     // Pasta
     'Carbonara': 'https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?auto=format&fit=crop&w=400&q=80',
@@ -169,42 +199,42 @@ function Menu() {
         }
       ]
     },
-    {
-      id: 'soups',
-      title: 'Soup & Salad',
-      items: [
-        {
-          name: 'Tom Yam River Prawns',
-          price: 320,
-          description: 'River prawns - Lemongrass - Chili - Garlic - Red curry paste'
-        },
-        {
-          name: 'Minestrone Soup',
-          price: 180,
-          description: 'Vegetables - Veggie broth - Italian basil - Croutons - Parmigiano Reggiano'
-        },
-        {
-          name: 'Tuna Nicoise Salad',
-          price: 350,
-          description: 'Market medley salad - Grilled AAA tuna - Potatoes - Green beans - Kalamata olives'
-        },
-        {
-          name: 'Classic Caesar Salad',
-          price: 260,
-          description: 'Romaine lettuce - Caesar dressing - Crispy bacon - Poached egg - Croutons - Parmigiano Reggiano'
-        },
-        {
-          name: 'Quinoa Salad',
-          price: 300,
-          description: 'Roasted beetroot - Pomegranate - Heirloom tomato - Chickpea - Cucumber - Feta cheese - Vinaigrette'
-        },
-        {
-          name: 'Heirloom Burrata Caprese Salad',
-          price: 530,
-          description: 'Heirloom tomatoes - Burrata - Italian basil - Pesto - EVOO - Balsamic glaze'
-        }
-      ]
-    },
+    // {
+    //   id: 'soups',
+    //   title: 'Soup & Salad',
+    //   items: [
+    //     {
+    //       name: 'Tom Yam River Prawns',
+    //       price: 320,
+    //       description: 'River prawns - Lemongrass - Chili - Garlic - Red curry paste'
+    //     },
+    //     {
+    //       name: 'Minestrone Soup',
+    //       price: 180,
+    //       description: 'Vegetables - Veggie broth - Italian basil - Croutons - Parmigiano Reggiano'
+    //     },
+    //     {
+    //       name: 'Tuna Nicoise Salad',
+    //       price: 350,
+    //       description: 'Market medley salad - Grilled AAA tuna - Potatoes - Green beans - Kalamata olives'
+    //     },
+    //     {
+    //       name: 'Classic Caesar Salad',
+    //       price: 260,
+    //       description: 'Romaine lettuce - Caesar dressing - Crispy bacon - Poached egg - Croutons - Parmigiano Reggiano'
+    //     },
+    //     {
+    //       name: 'Quinoa Salad',
+    //       price: 300,
+    //       description: 'Roasted beetroot - Pomegranate - Heirloom tomato - Chickpea - Cucumber - Feta cheese - Vinaigrette'
+    //     },
+    //     {
+    //       name: 'Heirloom Burrata Caprese Salad',
+    //       price: 530,
+    //       description: 'Heirloom tomatoes - Burrata - Italian basil - Pesto - EVOO - Balsamic glaze'
+    //     }
+    //   ]
+    // },
     {
       id: 'pasta',
       title: 'Pasta',
@@ -430,7 +460,7 @@ function Menu() {
         </div>
       </header>
 
-      <div className="menu-hero">
+      <div className="menu-hero fade-in-section fade-in-up">
         <div className="container">
           <h1 style={{ color: 'goldenrod', fontFamily: ' Cookie, cursive', fontSize: '75px' }}>Food Menu</h1>
           <p style={{ color: 'gold', fontFamily: ' Cookie, cursive', fontSize: '24px' }}>Discover our exquisite selection of handcrafted dishes</p>
@@ -442,10 +472,10 @@ function Menu() {
           <div className="menu-categories">
             {menuCategories.map((category) => (
               <section key={category.id} id={category.id} className="menu-category fade-in-section">
-                <h2 className="category-title">{category.title}</h2>
+                <h2 className="category-title fade-in-section fade-in-up">{category.title}</h2>
                 <div className="menu-items">
                   {category.items.map((item, index) => (
-                    <div key={index} className="menu-item-card">
+                    <div key={index} className="menu-item-card fade-in-section fade-in-up">
                       <div className="card-image">
                         <img 
                           src={dishImages[item.name] || `https://images.unsplash.com/photo-${1550000000000 + (index * 1000000)}?auto=format&fit=crop&w=400&q=80`} 
@@ -475,7 +505,7 @@ function Menu() {
         </div>
       </div>
 
-      <footer className="footer">
+      <footer className="footer fade-in-section fade-in-up">
         <div className="container">
           <div className="footer-content">
             <div className="footer-brand">
@@ -505,7 +535,18 @@ function Menu() {
           </div>
         </div>
       </footer>
+      {showBackToTop && (
+        <button
+          ref={backToTopRef}
+          className="back-to-top"
+          onClick={() => handleJumpTo('appetizers')}
+          aria-label="Back to top"
+        >
+          ↑
+        </button>
+      )}
     </div>
+    
   )
 }
 

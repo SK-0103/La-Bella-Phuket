@@ -1,22 +1,27 @@
 import './App.css'
 import { useNavigate } from 'react-router-dom'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 function Home() {
   const navigate = useNavigate()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [showBackToTop, setShowBackToTop] = useState(false)
+  const backToTopRef = useRef(null)
 
   // Intersection Observer for fade-in animations
   useEffect(() => {
     const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px'
+      threshold: 0.2,
+      rootMargin: '0px 0px -80px 0px'
     }
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          entry.target.classList.add('visible')
+          // Small delay to ensure smooth animation timing
+          setTimeout(() => {
+            entry.target.classList.add('visible')
+          }, 50)
         }
       })
     }, observerOptions)
@@ -33,6 +38,45 @@ function Home() {
       })
     }
   }, [])
+
+  // Scroll detection for back to top button
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop
+      setShowBackToTop(scrollTop > 300)
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  const scrollToTop = () => {
+    // Add clicked animation class using ref
+    if (backToTopRef.current) {
+      console.log('Adding animation class to back to top button')
+      // Remove any existing animation class first
+      backToTopRef.current.classList.remove('clicked')
+      // Force reflow to ensure class removal is processed
+      backToTopRef.current.offsetHeight
+      // Add the animation class
+      backToTopRef.current.classList.add('clicked')
+      console.log('Animation class added:', backToTopRef.current.classList.contains('clicked'))
+      
+      // Remove the class after animation completes
+      setTimeout(() => {
+        if (backToTopRef.current) {
+          backToTopRef.current.classList.remove('clicked')
+          console.log('Animation class removed')
+        }
+      }, 800)
+    }
+    
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    })
+  }
+
   const handleScrollTo = (id) => {
     const el = document.getElementById(id)
     if (el) {
@@ -115,7 +159,7 @@ function Home() {
       </header>
 
       {/* Hero Section */}
-      <section className="hero" id="home">
+      <section className="hero fade-in-section" id="home">
         <div className="container hero-inner">
           <div className="hero-image">
             <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1600&q=80" alt="Restaurant interior" />
@@ -144,10 +188,10 @@ function Home() {
       </section>
 
       {/* About Section */}
-      <section className="about fade-in-section" id="about">
+      <section className="about fade-in-section fade-in-left" id="about">
         <div className="container">
           <div className="about-content">
-            <div className="about-text">
+            <div className="about-text fade-in-section fade-in-up">
               <h2>Have the Best Pizza and Steak Experience</h2>
               <p>
                 At La Bella Phuket, we offer more than just a meal—we create an unforgettable dining experience. 
@@ -160,7 +204,7 @@ function Home() {
                 every bite is crafted with care and dedication to excellence.
               </p>
             </div>
-            <div className="about-image">
+            <div className="about-image fade-in-section fade-in-up">
               <img src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80" alt="Restaurant dining area" />
             </div>
           </div>
@@ -168,7 +212,7 @@ function Home() {
       </section>
 
       {/* Promotions */}
-      <section className="promotions fade-in-section" id="offers">
+      <section className="promotions fade-in-section fade-in-right" id="offers">
         <div className="container">
           <h2>Explore Our Exclusive Offers</h2>
           <div className="promo-grid">
@@ -198,7 +242,7 @@ function Home() {
       </section>
 
       {/* Reviews */}
-      <section className="reviews fade-in-section" id="reviews">
+      <section className="reviews fade-in-section fade-in-up" id="reviews">
         <div className="container">
           <div className="reviews-header">
             <h2>What Our Guests Say</h2>
@@ -241,7 +285,7 @@ function Home() {
       </section>
 
       {/* Booking / Contact Section */}
-      <section className="booking fade-in-section" id="booking">
+      <section className="booking fade-in-section fade-in-left" id="booking">
         <div className="container">
           <div className="contact-section">
             <div className="contact-whatsapp">
@@ -271,7 +315,7 @@ function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="footer">
+      <footer className="footer fade-in-section fade-in-up">
         <div className="container">
           <div className="footer-content">
             <div className="footer-brand">
@@ -301,6 +345,18 @@ function Home() {
           </div>
         </div>
       </footer>
+
+      {/* Back to Top Button */}
+      {showBackToTop && (
+        <button 
+          ref={backToTopRef}
+          className="back-to-top" 
+          onClick={() => handleScrollTo('home')}
+          aria-label="Back to top"
+        >
+          ↑
+        </button>
+      )}
     </div>
   )
 }
