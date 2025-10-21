@@ -1,10 +1,38 @@
 import './App.css'
 import { useNavigate } from 'react-router-dom'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 function Home() {
   const navigate = useNavigate()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+
+  // Intersection Observer for fade-in animations
+  useEffect(() => {
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible')
+        }
+      })
+    }, observerOptions)
+
+    // Observe all sections with fade-in-section class
+    const sections = document.querySelectorAll('.fade-in-section')
+    sections.forEach((section) => {
+      observer.observe(section)
+    })
+
+    return () => {
+      sections.forEach((section) => {
+        observer.unobserve(section)
+      })
+    }
+  }, [])
   const handleScrollTo = (id) => {
     const el = document.getElementById(id)
     if (el) {
@@ -116,7 +144,7 @@ function Home() {
       </section>
 
       {/* About Section */}
-      <section className="about" id="about">
+      <section className="about fade-in-section" id="about">
         <div className="container">
           <div className="about-content">
             <div className="about-text">
@@ -140,7 +168,7 @@ function Home() {
       </section>
 
       {/* Promotions */}
-      <section className="promotions" id="offers">
+      <section className="promotions fade-in-section" id="offers">
         <div className="container">
           <h2>Explore Our Exclusive Offers</h2>
           <div className="promo-grid">
@@ -170,7 +198,7 @@ function Home() {
       </section>
 
       {/* Reviews */}
-      <section className="reviews" id="reviews">
+      <section className="reviews fade-in-section" id="reviews">
         <div className="container">
           <div className="reviews-header">
             <h2>What Our Guests Say</h2>
@@ -213,7 +241,7 @@ function Home() {
       </section>
 
       {/* Booking / Contact Section */}
-      <section className="booking" id="booking">
+      <section className="booking fade-in-section" id="booking">
         <div className="container">
           <div className="contact-section">
             <div className="contact-whatsapp">

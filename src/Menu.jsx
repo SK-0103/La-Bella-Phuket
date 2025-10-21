@@ -1,11 +1,40 @@
 import './Menu.css'
 import { useNavigate } from 'react-router-dom'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import pizzaImg from './assets/pizza.jpg'
+import cookieFont from './assets/Cookie-Regular.ttf';
 
 function Menu() {
   const navigate = useNavigate()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+
+  // Intersection Observer for fade-in animations
+  useEffect(() => {
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible')
+        }
+      })
+    }, observerOptions)
+
+    // Observe all sections with fade-in-section class
+    const sections = document.querySelectorAll('.fade-in-section')
+    sections.forEach((section) => {
+      observer.observe(section)
+    })
+
+    return () => {
+      sections.forEach((section) => {
+        observer.unobserve(section)
+      })
+    }
+  }, [])
 
   const handleJumpTo = (id) => {
     const el = document.getElementById(id)
@@ -403,8 +432,8 @@ function Menu() {
 
       <div className="menu-hero">
         <div className="container">
-          <h1>Food Menu</h1>
-          <p>Discover our exquisite selection of handcrafted dishes</p>
+          <h1 style={{ color: 'goldenrod', fontFamily: ' Cookie, cursive', fontSize: '75px' }}>Food Menu</h1>
+          <p style={{ color: 'gold', fontFamily: ' Cookie, cursive', fontSize: '24px' }}>Discover our exquisite selection of handcrafted dishes</p>
         </div>
       </div>
 
@@ -412,7 +441,7 @@ function Menu() {
         <div className="container">
           <div className="menu-categories">
             {menuCategories.map((category) => (
-              <section key={category.id} id={category.id} className="menu-category">
+              <section key={category.id} id={category.id} className="menu-category fade-in-section">
                 <h2 className="category-title">{category.title}</h2>
                 <div className="menu-items">
                   {category.items.map((item, index) => (
@@ -434,7 +463,7 @@ function Menu() {
                         <p className="card-description">{item.description}</p>
                         <div className="card-footer">
                           <span className="card-price-mobile">฿{item.price.toLocaleString()}</span>
-                          <button className="card-btn">Order Now</button>
+                          {/* <button className="card-btn">Order Now</button> */}
                         </div>
                       </div>
                     </div>

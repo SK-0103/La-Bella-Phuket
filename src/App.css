@@ -169,6 +169,8 @@ body, html, .restaurant-home { font-family: 'Poppins', 'Inter', 'Segoe UI', Aria
 .about {
   padding: 80px 0;
   background: var(--white);
+  margin-top: 32px;
+  margin-bottom: 32px;
 }
 
 .about-content {
@@ -1084,6 +1086,7 @@ html {
   background: linear-gradient(90deg, var(--primary), var(--accent));
   border-radius: 999px;
   margin: 12px 0 18px 0;
+  align-self: center;
 }
 .hero .container.hero-inner {
   gap: 48px;
@@ -1126,6 +1129,27 @@ html {
 /* Slide-in animation already added in file; ensure visibility */
 .slide-in { will-change: transform, opacity; }
 
+/* Scroll-triggered fade-in animations */
+.fade-in-section {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.fade-in-section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Staggered animation delays for multiple elements */
+.fade-in-section:nth-child(1) { transition-delay: 0.1s; }
+.fade-in-section:nth-child(2) { transition-delay: 0.2s; }
+.fade-in-section:nth-child(3) { transition-delay: 0.3s; }
+.fade-in-section:nth-child(4) { transition-delay: 0.4s; }
+.fade-in-section:nth-child(5) { transition-delay: 0.5s; }
+.fade-in-section:nth-child(6) { transition-delay: 0.6s; }
+.fade-in-section:nth-child(7) { transition-delay: 0.7s; }
+
 /* Responsive improvements */
 @media (max-width: 1024px) {
   .hero .container.hero-inner { gap: 28px; }
@@ -1135,7 +1159,7 @@ html {
   .nav button { padding: 8px 10px; }
   .hero .container { padding-left: 16px; padding-right: 16px; }
   .hero h1 { font-size: 2rem; }
-  .primary-btn, .secondary-btn { width: 100%; text-align: center; }
+  .primary-btn, .secondary-btn { width: 100%; text-align: center; margin-bottom: 10px;}
 }
 
 /* About section width + side gaps */
@@ -1227,8 +1251,9 @@ html {
   margin-left: auto;
   margin-right: auto;
   width: 100%; /* not 100vw! */
-  padding: 120px 0 90px;
-  background: linear-gradient(120deg, rgb(118, 236, 118) 0%, #f8fff8 65%, #dd6161 100%);
+  padding: 90px 0 90px;
+  background: linear-gradient(120deg, rgb(166, 245, 166) 0%, #f8fff8 65%, #e29b9b 100%);
+  border-radius: 50px;
   min-height: unset;
   box-shadow: none;
   overflow: unset;
@@ -1237,8 +1262,8 @@ html {
   max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
-  padding-left: 26px;
-  padding-right: 26px;
+  padding-left: 32px;
+  padding-right: 32px;
   width: 100%;
 }
 .hero-inner {
@@ -1262,6 +1287,7 @@ html {
   border-radius: 21px;
   box-shadow: none;
   padding: 0 0;
+  margin-bottom: 20px;
 }
 .hero-image img {
   border-radius: 19px;
@@ -1276,7 +1302,7 @@ html {
   .hero-inner { grid-template-columns: 1fr; padding: 20px 8px; border-radius: 16px; }
 }
 @media (max-width: 700px) {
-  .hero, .hero > .container { padding: 24px 0 14px; }
+  .hero, .hero > .container { padding: 0px; }
   .hero-inner { border-radius: 8px; gap: 23px; padding: 6px 4px; }
   .hero-content { padding: 0; }
 }
@@ -1295,6 +1321,12 @@ html {
   border-bottom: 1.7px solid #654321;
   display: flex;
   align-items: center;
+  border-radius: 30px;
+  border-top-right-radius: 30px;
+  border-top-left-radius: 30px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  
 }
 .site-header > .container {
   max-width: 1220px;
@@ -1308,6 +1340,7 @@ html {
 }
 .site-header .brand {
   font-size: 2rem;
+  font-family: 'Poppins', 'Inter', Arial, sans-serif;
   font-weight: 800;
   letter-spacing: 1.2px;
   line-height: 1.13;
